@@ -87,3 +87,7 @@ img = load_img('./data/' + df.iloc[0]['filename'])
 img.show()
 print("There is a {}% chance this aircraft is an Airbus.".format(round((predict[0][0]*100), 3)))
 print("There is a {}% chance this aircraft is a Boeing.".format(round((predict[0][1]*100), 3)))
+if predict[0][0] > predict[0][1]:
+    print("Therefore, this aircraft must be an Airbus.")
+else:
+    print("Therefore this aircraft must be a Boeing.")
