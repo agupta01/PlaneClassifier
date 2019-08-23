@@ -24,6 +24,7 @@ IMAGE_CHANNELS = 3
 
 # Load Data
 filenames = os.listdir("./data")
+random.shuffle(filenames)
 imgs = []
 categories = []
 fileCount = 0
@@ -72,7 +73,7 @@ model.add(BatchNormalization())
 model.add(Dropout(0.5))
 model.add(Dense(2, activation='softmax'))
 
-model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 print(model.summary())
 
@@ -88,7 +89,7 @@ train_df = train_df.reset_index(drop=True)
 validate_df = validate_df.reset_index(drop=True)
 total_train = train_df.shape[0]
 total_validate = validate_df.shape[0]
-batch_size = 15
+batch_size = 12
 
 train_datagen = ImageDataGenerator(
     rotation_range = 25,
@@ -96,6 +97,7 @@ train_datagen = ImageDataGenerator(
     shear_range = 0.5,
     horizontal_flip = True,
     vertical_flip = True,
+    channel_shift_range = 0.5
 )
 
 train_generator = train_datagen.flow_from_dataframe(
