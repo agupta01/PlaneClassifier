@@ -13,8 +13,6 @@ from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from keras.utils import to_categorical
 
-K.tensorflow_backend._get_available_gpus()
-
 IMAGE_WIDTH = 399
 IMAGE_HEIGHT = 224
 IMAGE_SIZE = (IMAGE_HEIGHT, IMAGE_WIDTH)
@@ -85,8 +83,8 @@ model.load_weights("./model.h5")
 predict = model.predict_generator(test_generator, steps=np.ceil(nb_samples/15))
 img = load_img('./data/' + df.iloc[0]['filename'])
 img.show()
-print("There is a {}% chance this aircraft is an Airbus.".format(round((predict[0][0]*100), 3)))
-print("There is a {}% chance this aircraft is a Boeing.".format(round((predict[0][1]*100), 3)))
+print("{}% of this aircraft resembles a typical Airbus.".format(round((predict[0][0]*100), 3)))
+print("{}% of this aircraft resembles a typical Boeing.".format(round((predict[0][1]*100), 3)))
 if predict[0][0] > predict[0][1]:
     print("Therefore, this aircraft must be an Airbus.")
 else:
