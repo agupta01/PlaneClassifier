@@ -12,6 +12,7 @@ from keras.layers import (Activation, BatchNormalization, Conv2D, Dense,
 from keras.models import Sequential
 from keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
 from keras.utils import to_categorical
+from keras.utils import plot_model
 
 IMAGE_WIDTH = 399
 IMAGE_HEIGHT = 224
@@ -78,6 +79,9 @@ model.add(Dense(2, activation='softmax'))
 
 # Load previously saved weights into model
 model.load_weights("./model.h5")
+
+# Save image visualization of model NOTE: INSTALL PYDOT (pip install pydot)
+plot_model(model, to_file='modelmap.png', show_shapes=True)
 
 # Run prediction using model and generate probabilities array
 predict = model.predict_generator(test_generator, steps=np.ceil(nb_samples/15))

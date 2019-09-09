@@ -52,25 +52,27 @@ print(fileCount)
 
 # Initialize model
 model = Sequential()
-model.add(Conv2D(32, (3,3), activation='relu', input_shape=(IMAGE_HEIGHT,IMAGE_WIDTH,IMAGE_CHANNELS)))
+# Make the convolutional layers (2,3) because input shape is (224,399)
+model.add(Conv2D(32, (2,3), activation='relu', input_shape=(IMAGE_HEIGHT,IMAGE_WIDTH,IMAGE_CHANNELS)))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.25))
+# lower dropout rate from 0.25 to 0.12 because less than the normal amount of data is available to us. Lowered all dropouts accordingly
+model.add(Dropout(0.12))
 
 model.add(Conv2D(64, (3,3), activation='relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.25))
+model.add(Dropout(0.12))
 
 model.add(Conv2D(128, (3,3), activation='relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size=(2,2)))
-model.add(Dropout(0.25))
+model.add(Dropout(0.12))
 
 model.add(Flatten())
 model.add(Dense(512, activation='relu'))
 model.add(BatchNormalization())
-model.add(Dropout(0.5))
+model.add(Dropout(0.25))
 model.add(Dense(2, activation='softmax'))
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -78,8 +80,9 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 print(model.summary())
 
 earlystop = EarlyStopping(patience=10)
-learning_rate_reduction = ReduceLROnPlateau(monitor='val_acc', patience=2, verbose=1, factor=0.5, min_lr=0.00001)
-callbacks = [earlystop, learning_rate_reduction]
+# I suspect RLROP is causing the model to underfit, especially with so many epochs
+# learning_rate_reduction = ReduceLROnPlateau(monitor='val_acc', patience=2, verbose=1, factor=0.5, min_lr=0.00001)
+callbacks = [earlystop]
 
 # Preprocess data
 df['category'] = df['category'].replace({0: 'airbus', 1: 'boeing'})
