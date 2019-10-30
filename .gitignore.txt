@@ -1,0 +1,4 @@
+model.h5
+data/
+.DS_Store
+.ipnyb_checkpoints/
